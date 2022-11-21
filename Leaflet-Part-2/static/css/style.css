@@ -23,6 +23,23 @@ html {
   text-align: center;
 }
 
+.leaflet-tooltip {
+  position: absolute;
+  opacity: 0.2;
+  padding: 6px;
+  background-color: rgba(229, 233, 15, 0.967);
+  border: 5px solid rgba(237, 215, 9, 0.58);
+  border-radius: 5px;
+  /* color: #333; */
+  white-space: nowrap;
+  box-shadow: 0 5px 5px rgba(0,0,0,0.4);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+
 /* CSS from the leaflet-choropleth documentation */
 .legend {
   color: #555;

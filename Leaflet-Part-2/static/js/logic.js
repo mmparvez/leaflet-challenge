@@ -7,12 +7,21 @@ let tectonicplatesLayer = L.layerGroup();
 
 d3.json(plateUrl).then(function (plateData) {
   console.log(plateData);
-tectonicplatesLayer = L.geoJSON(plateData, {
-  color: "orange",
-  weight: 2,
-  fillOpacity: 0
-});
-earthQuakesCall(queryUrl,tectonicplatesLayer);
+  // Give each feature a popup that describes the place and time of the earthquake.
+  function onEachFeature(feature, layer) {
+    layer.bindPopup(`<h3>${feature.properties.Code}</h3><hr><p>${feature.properties.PlateName} Plate</p>`,
+    {autoPan: true});
+  }
+  
+  tectonicplatesLayer = L.geoJSON(plateData, {
+    onEachFeature: onEachFeature,
+    style: {
+      color: "orange",
+      weight: 2,
+      fillOpacity: 0
+    }
+  });
+  earthQuakesCall(queryUrl,tectonicplatesLayer);
 });
 
 
@@ -32,7 +41,8 @@ function createFeatures(earthquakeData, tectonicplatesLayer) {
   // Define a function that we want to run once for each feature in the features array.
   // Give each feature a popup that describes the place and time of the earthquake.
   function onEachFeature(feature, layer) {
-    layer.bindTooltip(`<h3>${feature.properties.place}</h3><hr><p>Magnitude: ${feature.properties.mag}</p><p>Depth: ${feature.geometry.coordinates[2]}</p>`);
+    layer.bindTooltip(`<h3>${feature.properties.place}</h3><hr><p>Magnitude: ${feature.properties.mag}</p><p>Depth: ${feature.geometry.coordinates[2]}</p>`,
+      {sticky: true},{interactive: true},{autoPan: true});
   }
 
   // Create a GeoJSON layer that contains the features array on the earthquakeData object.
