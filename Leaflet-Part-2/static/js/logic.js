@@ -1,10 +1,12 @@
-// Store our API endpoint as queryUrl.
+// Store our API endpoint
 let queryUrl = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson';
 let plateUrl = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_plates.json";
 
+// Create Layer Groups for the Earthquakes and Tectonic Plates.
 let earthquakesLayer  = L.layerGroup();
 let tectonicplatesLayer = L.layerGroup();
 
+// Perform a GET request to the plate URL.
 d3.json(plateUrl).then(function (plateData) {
   console.log(plateData);
   // Give each feature a popup that describes the place and time of the earthquake.
@@ -12,7 +14,7 @@ d3.json(plateUrl).then(function (plateData) {
     layer.bindPopup(`<h3>${feature.properties.Code}</h3><hr><p>${feature.properties.PlateName} Plate</p>`,
     {autoPan: true});
   }
-  
+  // Add geojson layer to layer groups
   tectonicplatesLayer = L.geoJSON(plateData, {
     onEachFeature: onEachFeature,
     style: {
@@ -21,10 +23,11 @@ d3.json(plateUrl).then(function (plateData) {
       fillOpacity: 0
     }
   });
+  // Call earthquakes call function
   earthQuakesCall(queryUrl,tectonicplatesLayer);
 });
 
-
+// Create a function to perform a GET request to the earthquake URL.
 function earthQuakesCall(queryUrl,tectonicplatesLayer) { 
 // Perform a GET request to the query URL/
   d3.json(queryUrl).then(function (data) {
@@ -62,7 +65,7 @@ function createFeatures(earthquakeData, tectonicplatesLayer) {
   });
 
 
-  // Send our earthquakes layer to the createMap function/
+  // Send our layergroups to the createMap function/
   createMap(earthquakesLayer, tectonicplatesLayer);
 }
 
